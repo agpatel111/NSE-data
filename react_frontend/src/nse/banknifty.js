@@ -22,7 +22,8 @@ export default class Nse extends Component {
             data5: [],
             data6: [],
             data7: [],
-            CESUM: []
+            CESUM: [],
+            LIVEPRICE: []
 
 
 
@@ -32,7 +33,7 @@ export default class Nse extends Component {
     }
     componentDidMount() {
         this.getData()
-        setInterval(this.getData, 10000);
+        setInterval(this.getData, 100000);
     }
 
 
@@ -44,8 +45,8 @@ export default class Nse extends Component {
             .get("https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY")
             .then((res) => {
                 let livevalue = res.data.records.index.last
-                // console.log({ data: res.data.filtered });
-
+                console.log({ data: livevalue });
+                this.setState({ LIVEPRICE: livevalue })
                 // res.data.records.index.last
 
                 const datat = []
@@ -54,9 +55,6 @@ export default class Nse extends Component {
                         datat.push(val)
 
                         // console.log("strikePrice-----", val);
-
-
-
                     }
 
                     this.setState({ data1: datat })
@@ -76,13 +74,7 @@ export default class Nse extends Component {
 
                     // datat2.push(datat)
                 })
-                // const PESUM = []
-                // datat2.map((val,i)=>{
-                //  let sum1 = val.PE.openInterest + val.PE.changeinOpenInterest
-                //     console.log(sum1);
-                //     PESUM.push(sum1)
-                //     this.setState({ PE: PESUM })
-                // })
+
 
 
 
@@ -106,7 +98,7 @@ export default class Nse extends Component {
                     if (i < 5) {
 
                         var ss = (val.PE.openInterest + val.PE.changeinOpenInterest)
-                        
+
 
                         // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
 
@@ -114,7 +106,7 @@ export default class Nse extends Component {
                         // console.log(datat6)
 
                     }
-                    
+
                     this.setState({ data6: datat6 })
                 })
                 // console.log("hiiiiiiiiiiiiiiiiiiiiiii>>>>>>>",Math.max(...datat6))
@@ -124,23 +116,11 @@ export default class Nse extends Component {
 
 
                 const numAscending = datat6.sort(compare);
-                console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numAscending);
+                // console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numAscending);
                 const num = numAscending.slice(0, 1);
                 console.log(num);
 
                 this.setState({ data7: num })
-
-                // console.log(Math.max(datat6))
-
-                // const datat7 = []
-                // datat5.map((val, i) => {
-                //     if (i < ) {
-                //         console.log(val.PE.openInterest) 
-                //         datat5.push(val)
-                //     }
-
-                // })
-
 
                 // CE sum data 
                 const CESUM = []
@@ -152,7 +132,7 @@ export default class Nse extends Component {
                         // console.log(Math.max(...ss))
                         // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
                         CESUM.push(ss)
-                        console.log(ss)
+                        // console.log(ss)
 
                     }
                 })
@@ -161,9 +141,9 @@ export default class Nse extends Component {
                     return b - a
                 }
                 const numA = CESUM.sort(compar);
-                console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numA);
+                // console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numA);
                 const num1 = numA.slice(0, 1);
-                console.log(num1);
+                // console.log(num1);
                 this.setState({ CESUM: num1 })
 
 
@@ -185,15 +165,51 @@ export default class Nse extends Component {
                 datat4.push(value)
 
 
+
+                // DATA2 DATA PE SUM
+
                 this.setState({ data4: datat4 })
 
 
-                // this.setState({ records: livevalue })
+                const SUM = []
+                const PESUM = []
 
-                // res.data.filtered.data.map((data1) => {
-                //     let data = [data1]
-                //     this.setState({ filtered: data })
-                // });
+
+                let Bridpriceofit = datat2.filter((ab, i) => {
+                    let CESum = (ab.CE.openInterest + ab.CE.changeinOpenInterest)
+                    let PESum = (ab.PE.openInterest + ab.PE.changeinOpenInterest)
+                    SUM.push(CESum)
+                    PESUM.push(PESum)
+
+                })
+                console.log("ddddd", SUM);
+
+                let CESum2 = 0;
+                for (let i = 0; i <
+                    SUM.length; i++) {
+                    CESum2 += SUM[i];
+
+                }
+                console.log("Bridprice", CESum2);
+
+                console.log("ddddd", PESUM);
+
+
+
+                let PESum2 = 0;
+                for (let i = 0; i < PESUM.length; i++) {
+
+                    PESum2 += PESUM[i];
+
+                }
+                console.log("Bridprice", PESum2);
+
+                let TOTAL_VALUE = PESum2 / CESum2
+
+                console.log("TOTAL_VALUE", TOTAL_VALUE);
+
+
+
             })
             .catch((err) => {
                 console.log(err);
@@ -203,15 +219,17 @@ export default class Nse extends Component {
 
     }
 
-
-
     render() {
-        const { records, filtered, data1, data2, data3, data4, data7, CESUM } = this.state;
+        const { records, filtered, data1, data2, data3, data4, data7, CESUM, LIVEPRICE } = this.state;
         // console.log(data2);
+
+        var LP = (LIVEPRICE)
+
         var PP = data2.filter((ab) => {
             let r = ab.PE.changeinOpenInterest + ab.PE.openInterest
             return data7[0] === r
         })
+        // console.log(PP);
 
         var CC = data1.filter((ab) => {
             let r = ab.CE.changeinOpenInterest + ab.CE.openInterest
@@ -220,6 +238,48 @@ export default class Nse extends Component {
 
 
 
+        let profit = PP
+
+
+
+
+        //  console.log(profit);
+        var P = profit.filter((ab, i) => {
+            let r = ab.strikePrice + 90
+            // console.log(r);
+            return 41686.7 === LIVEPRICE
+        })
+        // console.log("HEEEE",P);
+
+        var Bridprice = P.filter((ab, i) => {
+            let r = ab.CE.bidprice
+            // console.log("Bridprice", r);
+            return r;
+        })
+
+        var Bridpriceprofit = P.filter((ab, i) => {
+            let q = ab.CE.bidprice * 10 / 100
+            // console.log("Bridprice", q);
+            return q;
+        })
+
+        
+
+        switch (P) {
+            case Bridprice + Bridpriceprofit:
+
+                break;
+
+            default:
+                break;
+        }
+
+
+        // if (LIVEPRICE === 41686.7) {
+
+        //     console.log(profit)
+
+        // }
 
 
 
@@ -227,26 +287,6 @@ export default class Nse extends Component {
 
 
 
-
-
-
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaa",s)
-
-        // console.log(data7);
-        //    var d = data2.filter(ab=>{
-        //     let  r = ab.PE.changeinOpenInterest  + ab.PE.openInterest 
-
-        //        data7[0] === r
-        //     })
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaa",d)
-        //  let dataprice = []
-        // console.log(records);
-        //  dataprice.push(this.state.strikePrice)
-        // console.log({dataprice});
-        let underlyingValueData = records.underlyingValue
-        let filteredstrikePrice = filtered.strikePrice
-        // console.log('filtereddata',filtered );
-        // console.log(data7)
         return (
 
             <div>
@@ -315,11 +355,11 @@ export default class Nse extends Component {
                                 <tr style={{
                                     backgroundColor: '	#ffbf00'
                                 }}>
-                                    <th width="30%" title="Open Interest in contracts">CE</th>
-                    
+                                    <th width="30%" title="Open Interest in contracts">PE</th>
+
                                     <th width="40%" title="Strike Price">Strike Price</th>
-                               
-                                    <th width="40%" title="Open Interest in contracts">PE</th>
+
+                                    <th width="40%" title="Open Interest in contracts">CE</th>
                                 </tr>
                             </thead>
 
@@ -333,17 +373,21 @@ export default class Nse extends Component {
                                         return (
 
                                             <tr >
-
                                                 <td style={{
-                                                    backgroundColor: '#CCEEFF'
+                                                    backgroundColor: PP[0] === data ? '#33F9FF' : null
 
-                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
+                                                }}>{data.PE.changeinOpenInterest + data.PE.openInterest}</td>
+
                                                 <td style={{
                                                     backgroundColor: '#66CDAA'
 
                                                 }}  ><b>{data.strikePrice}</b></td>
 
-                                                <td >{data.PE.changeinOpenInterest + data.PE.openInterest}</td>
+
+                                                <td style={{
+                                                    backgroundColor: '#CCEEFF'
+
+                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
                                                 <td >{ }</td>
                                             </tr>
 
@@ -359,16 +403,21 @@ export default class Nse extends Component {
                                         return (
                                             <tr >
 
-                                                <td >{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
-                                                <td style={{
-                                                    backgroundColor: '#66CDAA'
-
-                                                }}  ><b>{data.strikePrice}</b></td>
-                                                
                                                 <td style={{
                                                     backgroundColor: '#CCEEFF'
 
                                                 }}>{data.PE.openInterest + data.PE.changeinOpenInterest}</td>
+                                                <td style={{
+                                                    backgroundColor: '#66CDAA'
+
+                                                }}  ><b>{data.strikePrice}</b></td>
+
+
+
+                                                <td style={{
+                                                    backgroundColor: CC[0] === data ? '#33F9FF' : null
+
+                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
                                             </tr>
                                         )
                                     }
