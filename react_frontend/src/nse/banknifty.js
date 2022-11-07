@@ -18,7 +18,13 @@ export default class Nse extends Component {
             data1: [],
             data2: [],
             data3: [],
-            data4: []
+            data4: [],
+            data5: [],
+            data6: [],
+            data7: [],
+            CESUM: []
+
+
 
 
         }
@@ -40,12 +46,14 @@ export default class Nse extends Component {
                 let livevalue = res.data.records.index.last
                 // console.log({ data: res.data.filtered });
 
+                // res.data.records.index.last
+
                 const datat = []
                 res.data.filtered.data.map((val, i) => {
                     if (livevalue <= val.strikePrice) {
                         datat.push(val)
 
-                        // console.log("strikePrice-----", i);
+                        // console.log("strikePrice-----", val);
 
 
 
@@ -68,13 +76,102 @@ export default class Nse extends Component {
 
                     // datat2.push(datat)
                 })
+                // const PESUM = []
+                // datat2.map((val,i)=>{
+                //  let sum1 = val.PE.openInterest + val.PE.changeinOpenInterest
+                //     console.log(sum1);
+                //     PESUM.push(sum1)
+                //     this.setState({ PE: PESUM })
+                // })
+
+
+
+                const datat5 = []
+                res.data.filtered.data.reverse().map((val, i) => {
+                    if (livevalue >= val.strikePrice) {
+
+                        datat5.push(val)
+                        // console.log("strikePrice-----asddddddddddddddddddddddddddddd", val);
+
+
+                    }
+                    this.setState({ data5: datat5 })
+
+                    // datat2.push(datat)
+                })
+
+                const datat6 = []
+
+                datat5.map((val, i) => {
+                    if (i < 5) {
+
+                        var ss = (val.PE.openInterest + val.PE.changeinOpenInterest)
+                        
+
+                        // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
+
+                        datat6.push(ss)
+                        // console.log(datat6)
+
+                    }
+                    
+                    this.setState({ data6: datat6 })
+                })
+                // console.log("hiiiiiiiiiiiiiiiiiiiiiii>>>>>>>",Math.max(...datat6))
+                let compare = (a, b) => {
+                    return b - a
+                }
+
+
+                const numAscending = datat6.sort(compare);
+                console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numAscending);
+                const num = numAscending.slice(0, 1);
+                console.log(num);
+
+                this.setState({ data7: num })
+
+                // console.log(Math.max(datat6))
+
+                // const datat7 = []
+                // datat5.map((val, i) => {
+                //     if (i < ) {
+                //         console.log(val.PE.openInterest) 
+                //         datat5.push(val)
+                //     }
+
+                // })
+
+
+                // CE sum data 
+                const CESUM = []
+                datat.map((val, i) => {
+                    if (i < 5) {
+
+                        var ss = (val.CE.openInterest + val.CE.changeinOpenInterest)
+                        // console.log(ss)
+                        // console.log(Math.max(...ss))
+                        // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
+                        CESUM.push(ss)
+                        console.log(ss)
+
+                    }
+                })
+
+                let compar = (a, b) => {
+                    return b - a
+                }
+                const numA = CESUM.sort(compar);
+                console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numA);
+                const num1 = numA.slice(0, 1);
+                console.log(num1);
+                this.setState({ CESUM: num1 })
 
 
                 const sum = res.data.filtered.CE.totOI
-                console.log(sum);
+                // console.log(sum);
 
                 const sum2 = res.data.filtered.PE.totOI
-                console.log(sum2);
+                // console.log(sum2);
 
                 const PCR = sum2 / sum
                 console.log(PCR)
@@ -109,15 +206,47 @@ export default class Nse extends Component {
 
 
     render() {
-        const { records, filtered, data1, data2, data3, data4 } = this.state;
+        const { records, filtered, data1, data2, data3, data4, data7, CESUM } = this.state;
+        // console.log(data2);
+        var PP = data2.filter((ab) => {
+            let r = ab.PE.changeinOpenInterest + ab.PE.openInterest
+            return data7[0] === r
+        })
+
+        var CC = data1.filter((ab) => {
+            let r = ab.CE.changeinOpenInterest + ab.CE.openInterest
+            return CESUM[0] === r
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaa",s)
+
+        // console.log(data7);
+        //    var d = data2.filter(ab=>{
+        //     let  r = ab.PE.changeinOpenInterest  + ab.PE.openInterest 
+
+        //        data7[0] === r
+        //     })
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaa",d)
         //  let dataprice = []
-        console.log(records);
+        // console.log(records);
         //  dataprice.push(this.state.strikePrice)
         // console.log({dataprice});
         let underlyingValueData = records.underlyingValue
         let filteredstrikePrice = filtered.strikePrice
         // console.log('filtereddata',filtered );
-
+        // console.log(data7)
         return (
 
             <div>
@@ -140,7 +269,7 @@ export default class Nse extends Component {
                                             <span id="equity_timeStamp" class="asondate"> As on {data.timestamp}  IST </span>
 
                                         </div>
-                                        
+
                                         {/* <Form>
                                             <Form.Group class="row d_flex">
                                                 <Form.Text><b>BANKNIFTY :  <b >   {data.index.last} <b>({data.index.percentChange}%)</b></b></b></Form.Text>
@@ -177,186 +306,79 @@ export default class Nse extends Component {
                         }
                     </div>
 
-
-                    <Table className="mt-3" class="tableFixHead">
-                        <thead>
-
-
-                            <tr class="table-secondary"><th className="text-center" colSpan="11">CALLS</th>
-                                <th className="text-center" colSpan="11">PUTS</th></tr>
-                            <tr style={{
-                                backgroundColor: '	#ffbf00'
-                            }}>
-                                <th width="40px" title="Open Interest in contracts">OI</th>
-                                <th width="4.34%" title="Change in Open Interest (Contracts)">Chng in OI</th>
-                                <th width="5.54%" title="Volume in Contracts">Volume</th>
-                                <th width="3.34%" title="Implied Volatility">IV</th>
-                                <th width="4.34%" title="Last Traded Price">LTP</th>
-                                <th width="4.34%" title="Change w.r.t to Previous Close">Chng</th>
-                                <th width="4.34%" title="Best Bid/Buy Qty">Bid Qty</th>
-                                <th width="4.34%" title="Best Bid/Buy Price">Bid Price</th>
-                                <th width="4.34%" title="Best Ask/Sell Price">Ask Price</th>
-                                <th width="4.34%" title="Best Ask/Sell Qty">Ask Qty</th>
-                                <th width="6.34%" title="Strike Price">Strike Price</th>
-                                <th width="4.34%" title="Best Bid/Buy Qty">Bid Qty</th>
-                                <th width="4.34%" title="Best Bid/Buy Price">Bid Price</th>
-                                <th width="4.34%" title="Best Ask/Sell Price">Ask Price</th>
-                                <th width="4.34%" title="Best Ask/Sell Qty">Ask Qty</th>
-                                <th width="4.34%" title="Change w.r.t to Previous Close">Chng</th>
-                                <th width="4.34%" title="Last Traded Price">LTP</th>
-                                <th width="3.34%" title="Implied Volatility">IV</th>
-                                <th width="5.54%" title="Volume in Contracts">Volume</th>
-                                <th width="4.34%" title="Change in Open Interest (Contracts)">Chng in OI</th>
-                                <th width="5.14%" title="Open Interest in contracts">OI</th>
-                            </tr>
-                        </thead>
+                    <div id="chartContainer">
+                        <Table className="mt-3" class="tableFixHead" id="chartContainer">
+                            <thead>
 
 
-                        <tbody>
 
-                            {data2.map((data, i) => {
-                                // console.log(i);
-                                if (i > 55) {
+                                <tr style={{
+                                    backgroundColor: '	#ffbf00'
+                                }}>
+                                    <th width="30%" title="Open Interest in contracts">CE</th>
+                    
+                                    <th width="40%" title="Strike Price">Strike Price</th>
+                               
+                                    <th width="40%" title="Open Interest in contracts">PE</th>
+                                </tr>
+                            </thead>
 
-                                    return (
-                                        <tr>
 
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                            <tbody>
 
-                                            }}>{data.CE.openInterest}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                {data2.map((data, i) => {
+                                    // let price = console.log(PP);
+                                    if (i > 55) {
 
-                                            }}>{data.CE.changeinOpenInterest}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                        return (
 
-                                            }}>{data.CE.totalTradedVolume}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                            <tr >
 
-                                            }}>{data.CE.impliedVolatility}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                                <td style={{
+                                                    backgroundColor: '#CCEEFF'
 
-                                            }}>{data.CE.lastPrice}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
+                                                <td style={{
+                                                    backgroundColor: '#66CDAA'
 
-                                            }}>{data.CE.change.toFixed(2)}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                                }}  ><b>{data.strikePrice}</b></td>
 
-                                            }}>{data.CE.totalBuyQuantity}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                                <td >{data.PE.changeinOpenInterest + data.PE.openInterest}</td>
+                                                <td >{ }</td>
+                                            </tr>
 
-                                            }}>{data.CE.bidprice}</td>
+                                        )
 
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
+                                    }
 
-                                            }}>{data.CE.askPrice}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.CE.askQty}</td>
-
-                                            <td style={{
-                                                backgroundColor: '#66CDAA'
-
-                                            }}  ><b>{data.strikePrice}</b></td>
-                                            <td >{data.PE.totalBuyQuantity}</td>
-                                            <td >{data.PE.bidprice}</td>
-                                            <td >{data.PE.askPrice}</td>
-                                            <td >{data.PE.askQty}</td>
-                                            <td >{data.PE.change.toFixed(2)}</td>
-                                            <td style={{
-                                                backgroundColor: ""
-                                            }}>{data.CE.lastPrice}</td>
-                                            <td >{data.PE.impliedVolatility}</td>
-                                            <td >{data.PE.totalTradedVolume}</td>
-                                            <td >{data.PE.changeinOpenInterest}</td>
-                                            <td >{data.PE.openInterest}</td>
-                                        </tr>
-                                    )
+                                })
                                 }
-                            })
-                            }
-                            {data1.map((data, i) => {
-                                // console.log(i);
-                                if (i < 11) {
-                                    return (
-                                        <tr >
-                                            <td >{data.CE.openInterest}</td>
-                                            <td >{data.CE.changeinOpenInterest}</td>
-                                            <td >{data.CE.totalTradedVolume}</td>
-                                            <td >{data.CE.impliedVolatility}</td>
-                                            <td style={{
-                                                backgroundColor: ''
+                                {data1.map((data, i) => {
+                                    // console.log(i);
+                                    if (i < 11) {
+                                        return (
+                                            <tr >
 
-                                            }}>{data.CE.lastPrice}</td>
-                                            <td >{data.CE.change.toFixed(2)}</td>
-                                            <td >{data.CE.totalBuyQuantity}</td>
-                                            <td >{data.CE.bidprice}</td>
+                                                <td >{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
+                                                <td style={{
+                                                    backgroundColor: '#66CDAA'
 
-                                            <td >{data.CE.askPrice}</td>
-                                            <td >{data.CE.askQty}</td>
+                                                }}  ><b>{data.strikePrice}</b></td>
+                                                
+                                                <td style={{
+                                                    backgroundColor: '#CCEEFF'
 
-                                            <td style={{
-                                                backgroundColor: '#66CDAA'
-
-                                            }}  ><b>{data.strikePrice}</b></td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }} >{data.PE.totalBuyQuantity}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.bidprice}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.askPrice}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.askQty}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.change.toFixed(2)}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.CE.lastPrice}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.impliedVolatility}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.totalTradedVolume}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.changeinOpenInterest}</td>
-                                            <td style={{
-                                                backgroundColor: '#CCEEFF'
-
-                                            }}>{data.PE.openInterest}</td>
-                                        </tr>
-                                    )
+                                                }}>{data.PE.openInterest + data.PE.changeinOpenInterest}</td>
+                                            </tr>
+                                        )
+                                    }
+                                })
                                 }
-                            })
-                            }
 
 
-                        </tbody>
-                    </Table>
+                            </tbody>
+                        </Table>
+                    </div>
                 </>
 
             </div>

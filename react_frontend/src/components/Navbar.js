@@ -11,8 +11,8 @@ const NavbarMenu = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
             <Link className="nav-students" to="/">Home</Link>
-            <Link className="nav-addStudents" to="/item">item</Link>
-            <Link className="nav-addStudents" to="/nse">BANKNIFTY</Link>
+            <Link className="nav-addStudents" to="/Item">item</Link>
+            <Link className="nav-addStudents" to="/Nse">BANKNIFTY</Link>
             <Link className="nav-addStudents" to="/Nifty">NIFTY</Link>
 
           </Nav>

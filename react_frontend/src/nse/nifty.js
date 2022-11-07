@@ -1,10 +1,9 @@
-// import { getLinearProgressUtilityClass } from '@material-ui/core'
+
 import axios from 'axios'
 
 import React, { Component } from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { Container, Form, Table } from 'react-bootstrap'
+
+import {  Table } from 'react-bootstrap'
 import NavbarMenu from '../components/Navbar'
 
 
@@ -112,7 +111,7 @@ export default class Nses extends Component {
     render() {
         const { records, filtered, data1, data2, data3, data4 } = this.state;
         //  let dataprice = []
-        console.log(records);
+        // console.log(records);
         //  dataprice.push(this.state.strikePrice)
         // console.log({dataprice});
         let underlyingValueData = records.underlyingValue
@@ -288,6 +287,7 @@ export default class Nses extends Component {
                             }
                             {data1.map((data, i) => {
                                 // console.log(i);
+                                
                                 if (i < 11) {
                                     return (
                                         <tr >
