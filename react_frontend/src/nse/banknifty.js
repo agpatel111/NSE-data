@@ -1,436 +1,669 @@
-// import { getLinearProgressUtilityClass } from '@material-ui/core'
-import axios from 'axios'
-
-import React, { Component } from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { Container, Form, Table } from 'react-bootstrap'
-import NavbarMenu from '../components/Navbar'
+import React, { useEffect, useState } from "react";
+// import { FormControl } from "react-bootstrap";
 
 
-export default class Nse extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            filtered: [],
-            records: [],
-            strikePrice: [],
-            data1: [],
-            data2: [],
-            data3: [],
-            data4: [],
-            data5: [],
-            data6: [],
-            data7: [],
-            CESUM: [],
-            LIVEPRICE: []
+import Table from 'react-bootstrap/Table';
+
+const axios = require('axios').default;
+
+function Nse() {
 
 
+    const [getdata, setGetdata] = useState([]);
+    const [livegreterthan, setLivegreterthan] = useState([]);
+    const [livelessthan, setLiveLessthan] = useState([]);
+    const [pemax, setPemax] = useState([]);
+    const [cemax, setCemax] = useState([]);
+    const [liveprices, setLiveprice] = useState([]);
+    const [pcr, setPcr] = useState([]);
 
 
-        }
+    const [diffrent, setDiffrent] = useState([]);
 
-    }
-    componentDidMount() {
-        this.getData()
-        setInterval(this.getData, 100000);
-    }
+    const [buyyyyyyy, setBuy_price] = useState([])
+
+
+    // const [pe, setPE] = useState([])
+    // const [ce, setCe] = useState([])    
+    const [bid_price, setBid_price] = useState([]);
+    const [strike_price, setStrike_price] = useState([]);
+
+
+    const [livebridprice, setLivebdp] = useState([]);
+    const [p_data, setP_data] = useState([]);
+    const [uid, setUid] = useState([]);
 
 
 
 
 
-    getData = async () => {
-        await axios
-            .get("https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY")
-            .then((res) => {
-                let livevalue = res.data.records.index.last
-                console.log({ data: livevalue });
-                this.setState({ LIVEPRICE: livevalue })
-                // res.data.records.index.last
+    // console.log('buy>>>>>>>>>>',p_data);
+    useEffect(() => {
 
-                const datat = []
-                res.data.filtered.data.map((val, i) => {
-                    if (livevalue <= val.strikePrice) {
-                        datat.push(val)
+        fetchData();
+        const interval = setInterval(() => {
+            console.log('This will run every second!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+            fetchData();
+        }, 10000);
+        return () => clearInterval(interval);
 
-                        // console.log("strikePrice-----", val);
-                    }
+    }, []);
 
-                    this.setState({ data1: datat })
-                    // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", datat);
+    useEffect(() => {
+
+        nsedata();
+
+    }, [bid_price]);
+
+    useEffect(() => {
+
+        shelldata();
+
+    }, [p_data]);
+
+
+
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    async function fetchData() {
+        await axios.get("https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY", proxyurl, {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Cookie': 'AKA_A2=A; ak_bmsc=2C30C88FD1C6BEED087CCD02E7643772~000000000000000000000000000000~YAAQPvASAr+cI2F6AQAAk6+tdQxncocfEFby+qeRnNu3MgRblj1MWVtVy+W1Stx/CNaRaf9PhfVoT568zV8qztByVrxV+WfdrCN2nXU0nToPdEoaZFeZ7irUu8aSUXcln/sou0taKkr1gjmS3f6faZs+Rv8LA32eUAtlTD+GgYL0OKTJ44qVVinDxeeaVOiLxzQaiv0YjRCLcovFhO7jVBCJhNeXzgOeUYCLjkOg+2DEnRaF1Cd85f83pkjjieOFpjvywz20ImVWy1fr+S2nEDqmcgKZdhjHPfJ76+Z3bvVB/Kyv2dH7J8BMjlVf7kxyGbmot54yxchJNEMs0A/QTkeow2Xa54IcGZo/RUxGRu90SFu6VpfcxLaVOdN9EbvhcNs//OPA1jhDm9Nf4A==; bm_sv=BB4B29FC4D88791AABD65B43FACB0AF7~ObLG1UzBN4vOInl5m0vWqjOpZUXtLDHJDxr92uXdHHp5bjKjrEMMJcJRzS5VY5lkIs3N7JH+gZtoTnYIWKFqPZFhFC8Oo+sjmZLrin4taKkPfpvp7RdbqySQh6BLQwbWg3UgQJUQN29H0q9MJN6FuaW2b2i13zn5CmZUSDSpJVo=',
+            'Host': 'www.nseindia.com',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'TE': 'trailers',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0',
+            'Access-Control-Allow-Headers': '*'
+        })
+
+            // await axios.get("http://127.0.0.1:8000/nse/")
+            .then((json) => {
+
+                axios.get('http://127.0.0.1:8000/nse/')
+                    .then(response => {
+                        let r = response.data.data
+                        r.map((ab, i) => {
+                            let a = ab.uid
+                            console.log("uid>>>>>>>>>>>>>>>>>", a);
+                            setUid(a)
+                        })
+                    });
+
+                // console.log("buy>>>>>.",buy.lenth);
+                // console.log('json', json.data)
+
+                // setData(json.data.records.index)
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< All DATA SAVE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                let raa = json.data.records.timestamp
+
+                setGetdata(raa)
+
+                // <<<<<<<<<<<<<<<<<< liveprice >>>>>>>>>>>>>>>>>>
+
+                let liveprice = json.data.records.index.last
+                setLiveprice(liveprice)
+
+
+                // / <<<<<<<<<< data of live price greterthan >>>>>>>>>>>>>
+
+                let up_price = json.data.filtered.data.filter((ab) => {
+
+                    let r = ab.strikePrice
+                    return r >= liveprice;
                 })
-
-                const datat2 = []
-                res.data.filtered.data.map((val, i) => {
-                    if (livevalue >= val.strikePrice) {
-
-                        datat2.push(val)
-                        // console.log("strikePrice-----", val);
+                setLivegreterthan(up_price)
+                // console.log("up_price>>>>>>", up_price);
 
 
-                    }
-                    this.setState({ data2: datat2 })
+                // <<<<<<<<<< data of live price lessthan >>>>>>>>>>>>>
 
-                    // datat2.push(datat)
+                let down_price = json.data.filtered.data.filter((ab) => {
+
+                    let r = ab.strikePrice
+                    return r <= liveprice;
                 })
+                setLiveLessthan(down_price)
+                // console.log("down_price>>>>>>", down_price);
 
 
+                // <<<<<<<<<< DOWN PRICE (BASE PRICE) PE and CE op and change Op sum and find big value >>>>>>>>>>>>>
 
+                let PE_CE_SUM = down_price.slice(-5).map((val) => {
+                    var ss = (val.PE.openInterest + val.PE.changeinOpenInterest)
 
-                const datat5 = []
-                res.data.filtered.data.reverse().map((val, i) => {
-                    if (livevalue >= val.strikePrice) {
-
-                        datat5.push(val)
-                        // console.log("strikePrice-----asddddddddddddddddddddddddddddd", val);
-
-
-                    }
-                    this.setState({ data5: datat5 })
-
-                    // datat2.push(datat)
+                    return ss;
                 })
-
-                const datat6 = []
-
-                datat5.map((val, i) => {
-                    if (i < 5) {
-
-                        var ss = (val.PE.openInterest + val.PE.changeinOpenInterest)
-
-
-                        // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
-
-                        datat6.push(ss)
-                        // console.log(datat6)
-
-                    }
-
-                    this.setState({ data6: datat6 })
-                })
-                // console.log("hiiiiiiiiiiiiiiiiiiiiiii>>>>>>>",Math.max(...datat6))
                 let compare = (a, b) => {
                     return b - a
                 }
-
-
-                const numAscending = datat6.sort(compare);
-                // console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numAscending);
+                const numAscending = PE_CE_SUM.sort(compare);
                 const num = numAscending.slice(0, 1);
-                console.log(num);
+                // console.log("PE_CE_SUM>>>>>>>>>>>>>>>",numAscending);
 
-                this.setState({ data7: num })
+                // console.log('liveprices',liveprices);
 
-                // CE sum data 
-                const CESUM = []
-                datat.map((val, i) => {
-                    if (i < 5) {
+                // <<<<<<<<<< UP PRICE (SARATE PRICE) PE and CE op and change Op sum and find big value >>>>>>>>>>>>>
 
-                        var ss = (val.CE.openInterest + val.CE.changeinOpenInterest)
-                        // console.log(ss)
-                        // console.log(Math.max(...ss))
-                        // const max = Math.max.apply(null, console.log((val.PE.openInterest + val.PE.changeinOpenInterest)));
-                        CESUM.push(ss)
-                        // console.log(ss)
+                let CE_PE_SUM = up_price.slice(0, 5).map((val) => {
+                    var ss = (val.CE.openInterest + val.CE.changeinOpenInterest)
+                    // console.log("Num>>>>>>>>>>>>>>>", ss);
 
-                    }
+                    return ss;
                 })
-
-                let compar = (a, b) => {
+                let compare1 = (a, b) => {
                     return b - a
                 }
-                const numA = CESUM.sort(compar);
-                // console.log("yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", numA);
-                const num1 = numA.slice(0, 1);
-                // console.log(num1);
-                this.setState({ CESUM: num1 })
+                const numAscending1 = CE_PE_SUM.sort(compare1);
+                const num1 = numAscending1.slice(0, 1);
+                // console.log("Num>>>>>>>>>>>>>>>",numAscending1);
 
 
-                const sum = res.data.filtered.CE.totOI
-                // console.log(sum);
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PE IN MAXIMUM OI OF NSE DATA >>>>>>>>>>>>>>>>>
+                const PE_present_price = []
+                const PE_present_price2 = []
 
-                const sum2 = res.data.filtered.PE.totOI
-                // console.log(sum2);
+                // setPE(PE_present_price2)
+                // console.log(PE_present_price2) 
+                down_price.filter((ab) => {
+                    let r = ab.PE.changeinOpenInterest + ab.PE.openInterest
+
+                    if (r === num[0]) {
+                        PE_present_price.push(ab)
+                        PE_present_price2.push(ab.strikePrice)
+
+                        // console.log("d>>>>>>>>>>>>",ab);
+                    }
+
+                    return ab;
+                })
+                // console.log("PE_pregent_price",PE_present_price);
+                setPemax(PE_present_price)
+
+
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CE IN MAXIMUM OI OF NSE DATA >>>>>>>>>>>>>>>>>
+                const CE_present_price = []
+                const CE_present_price2 = []
+
+                // setCe(CE_present_price2)
+
+                up_price.map((ab) => {
+                    let r = ab.CE.changeinOpenInterest + ab.CE.openInterest
+                    if (r === num1[0]) {
+                        // console.log(ab.strikePrice);
+                        CE_present_price.push(ab)
+                        CE_present_price2.push(ab.strikePrice)
+
+
+
+                    }
+                    return ab;
+                })
+                // console.log("CE_pregent_price", CE_present_price);
+                setCemax(CE_present_price)
+
+                // <.............................. LIVE BRIDPRICE .............>
+
+
+                PE_present_price.map(ab => {
+
+                    let r = ab.CE.bidprice
+
+                    setLivebdp(r)
+                
+                    // console.log(a);
+                    return ab;
+                })
+
+
+
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PCR VALUE FIND >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+                const sum = json.data.filtered.CE.totOI
+                const sum2 = json.data.filtered.PE.totOI
 
                 const PCR = sum2 / sum
-                console.log(PCR)
-                const datat3 = []
-                datat3.push(PCR)
 
-                this.setState({ data3: datat3 })
-
-                const value = res.data.records
-                const datat4 = []
-                datat4.push(value)
-
-
-
-                // DATA2 DATA PE SUM
-
-                this.setState({ data4: datat4 })
-
-
-                const SUM = []
-                const PESUM = []
-
-
-                let Bridpriceofit = datat2.filter((ab, i) => {
-                    let CESum = (ab.CE.openInterest + ab.CE.changeinOpenInterest)
-                    let PESum = (ab.PE.openInterest + ab.PE.changeinOpenInterest)
-                    SUM.push(CESum)
-                    PESUM.push(PESum)
-
+                setPcr(PCR)
+                // <<<<<<<<<<<<<<<<<<<<<<< PE CE DIFFRINET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                const CE_PE_Diffrent = []
+                PE_present_price.map((ab) => {
+                    let a = (ab.PE.openInterest + ab.PE.changeinOpenInterest) - (ab.CE.openInterest + ab.CE.changeinOpenInterest)
+                    CE_PE_Diffrent.push(a)
+                    return ab;
                 })
-                console.log("ddddd", SUM);
+                setDiffrent(CE_PE_Diffrent)
 
-                let CESum2 = 0;
-                for (let i = 0; i <
-                    SUM.length; i++) {
-                    CESum2 += SUM[i];
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BUYING PRICE FIND >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-                }
-                console.log("Bridprice", CESum2);
-
-                console.log("ddddd", PESUM);
+                // const BUY_PRICE = []
+                // console.log();
 
 
+                // PE_present_price.map((ab) => {
 
-                let PESum2 = 0;
-                for (let i = 0; i < PESUM.length; i++) {
+                //     if (PE_present_price !== CE_present_price) {
+                //         let r = ab.strikePrice + 90
+                //         // console.log(r)
+                //         if (44000 >= liveprice) {
+                //             // console.log(buy.length === 0);
+                //             // let a = 0;
+                //             // while (
+                //             //     BUY_PRICE.length === 0 && a ===0) {
+                //             //     console.log("hello");
 
-                    PESum2 += PESUM[i];
+                //             //     a = 1;
+                //             //     // BUY_PRICE.push(ab)
+                //             //     // nsedata()
 
-                }
-                console.log("Bridprice", PESum2);
+                //             // }
+                //             // setLoading(false)    
+                //             // console.log(r >= liveprice);
+                //             return ab;
+                //         }
+                //         return ab;
+                //     }
+                //     return ab;
+            })
+            // setBuy_price(BUY_PRICE)
+            // console.log('qqqqqqqqqqqq', BUY_PRICE);
 
-                let TOTAL_VALUE = PESum2 / CESum2
+            // var BUY_PRICE5 = PE_present_price.filter((ab) => {
+            //     if (PE_present_price !== CE_present_price && CE_PE_Diffrent > 50000) {
+            //         let r = ab.strikePrice + 90
+            //         if (44000 >= liveprice) {
+            //             BUY_PRICE.push(ab)
 
-                console.log("TOTAL_VALUE", TOTAL_VALUE);
+            //             // console.log("dddddddddddd",null === buy);
+            //             // if( null === buy){
+            //             // console.log("hello");
+            //             // nsedata()
+            //             // }
+
+            //         }
+            //         // return r >= liveprice;
+
+            //     }
+
+            // })
 
 
+            // console.log('buyyyyyyy',pemax);
+            // const buyssss= [] 
+            // console.log("buyssss",buyssss);
+            // let BUY_PRICE7 = pemax.map((ab) => {
+            //     if (pemax !== cemax && diffrent >= 50000 && pcr >= 0.7) {
+            //         let r = ab.strikePrice + 90
+            //         // console.log(r);
+            //         if (44000 >= liveprices) {
+            //             let a = 0;
+
+            //             // console.log('buy.length', buy.length);
+            //             while (buyyyyyyy.length === 0 && a === 0) {
+
+            //                 console.log(ab);
+            //                 console.log("helloooooo");
+            //                 buyssss.push(ab)
+            //                 setBuy_price([...buyyyyyyy, ab])
+
+
+            //                 a = 1;
+            //             }
+
+
+            //         }
+            //     }
+            // })
+            // PE_present_price.filter((ab) => {
+            //             let r = ab.strikePrice + 90
+            //             switch(ab){
+            //                 case():
+
+
+            //             }
+            // })
+
+
+            // if (PE_present_price2 !== CE_present_price2) {
+            //     PE_present_price.filter((ab) => {
+            //         let r = ab.strikePrice + 90
+            //         if (r >= liveprice) {
+            //         console.log('rrrrrrrrrrrr',r);
+            //         BUY_PRICE.push(ab)
+
+            //     }
+            // })
+            // nsedata()
+            // }
+
+
+
+            // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PROFIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+            // let Bridprice1 = BUY_PRICE.map((ab) => {
+            //     let r = ab.CE.bidprice
+            //     console.log("rrrrrrrrrrrrrrrrrrrrrrrr", r);
+            //     return r;
+            // })
+            // // setBid_price(Bridprice1)
+
+
+            // let strike_price = BUY_PRICE.map((ab) => {
+            //     let r = ab.CE.strikePrice
+            //     return r;
+
+            // })
+
+            // // console.log("Bridprice1", strike_price);
+
+            // let Bridprice = PE_present_price.map((ab) => {
+            //     let r = ab.CE.bidprice
+            //     return r;
+            // })
+            // // console.log("Bridprice", Bridprice);
+
+            // let Bridpriceprofit = BUY_PRICE.map((ab, i) => {
+            //     let q = ab.CE.bidprice * 10 / 100
+            //     return q;
+            // })
+
+            // // console.log("Bridpriceproficte", Bridpriceprofit);
+
+            // let totalsum = Bridprice1[0] + Bridpriceprofit[0];
+            // // console.log("totalsum>>>>>>>>>>>>>>>", totalsum);
+
+            // if (totalsum === Bridprice) {
+            //     let x = BUY_PRICE.pop()
+            //     return x;
+            // }
+
+            // console.log("POP", BUY_PRICE);
+
+            // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< STOP LOSS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+            // let STOP_LOSS = PE_pregent_price.filter((ab) => {
+            //     if (PE_pregent_price !== CE_pregent_price && CE_PE_Diffrent >= 50000 && PCR >= 1) {
+            //         let r = ab.strikePrice + 10
+            //         // console.log(r);
+            //    
+            //         return r;
+            //     }
+
+            //     if (STOP_LOSS = liveprice) {
+            //         let x = BUY_PRICE.pop()
+            //         return x;
+            //     }
+            // })
+            // console.log("a>>>>>>>>>>>>>>>>>>>", BUY_PRICE);
+
+
+            // })
+            .catch(err => {
+                console.log(err)
+            })
+
+    }
+
+
+
+    // console.log("BUY_PRICE1>>>>>>>>>>>>", BUY_PRICE1);
+
+
+
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< post >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>........
+
+
+
+
+    const nsedata = async () => {
+        try {
+
+            console.log("bid_price", bid_price);
+            console.log("strike_price", strike_price);
+
+            const article = {
+                'bid_price': bid_price, 'strike_price': strike_price, 'live_price': liveprices, 'pcr_value': pcr
+            };
+            //  console.log("article",article);
+            let formField = new FormData()
+            formField.append('bid_price', bid_price)
+            formField.append('strike_price', strike_price)
+
+            formField.append('live_price', liveprices)
+            formField.append('pcr_value', pcr)
+
+            // console.log("formField", bid_price);
+
+
+            await axios({
+                method: 'post',
+                url: 'http://127.0.0.1:8000/nse/',
+                mode: 'cors',
+                data: article,
+
+
+            }).then(response => {
+                console.log(response.data);
 
             })
-            .catch((err) => {
-                console.log(err);
-            });
-
-
-
+        } catch (err) {
+            // here we are receiving validation errors
+            console.log("Err == ", err.response);
+            // console.log(err.response.data.errors);
+        }
     }
 
-    render() {
-        const { records, filtered, data1, data2, data3, data4, data7, CESUM, LIVEPRICE } = this.state;
-        // console.log(data2);
-
-        var LP = (LIVEPRICE)
-
-        var PP = data2.filter((ab) => {
-            let r = ab.PE.changeinOpenInterest + ab.PE.openInterest
-            return data7[0] === r
-        })
-        // console.log(PP);
-
-        var CC = data1.filter((ab) => {
-            let r = ab.CE.changeinOpenInterest + ab.CE.openInterest
-            return CESUM[0] === r
-        })
 
 
+    const shelldata = async () => {
+        try {
 
-        let profit = PP
+            {
+                const article = {
+                    'uid': "4db4f719c05f4160abea6347ca95ab1c", 'shell_bid_price': livebridprice, 'shell_strike_price': liveprices
+                };
+                // console.log("patch_data----------------", article);
+                await axios({
+                    method: 'patch',
+                    url: 'http://127.0.0.1:8000/nse/',
+                    data: article
+                }).then(response => {
+                    console.log(response.data);
 
+                })
+            }
+        } catch (err) {
+            // here we are receiving validation errors
+            console.log("Err == ", err.response);
+            // console.log(err.response.data.errors);
+        }
+    }
 
+    const buys = []
 
-
-        //  console.log(profit);
-        var P = profit.filter((ab, i) => {
+    pemax.map((ab) => {
+        if (pemax !== cemax && diffrent >= 50000 &&  pcr >= 0.9) {
             let r = ab.strikePrice + 90
             // console.log(r);
-            return 41686.7 === LIVEPRICE
-        })
-        // console.log("HEEEE",P);
+            if (r >= liveprices) {
+                let a = 0;
 
-        var Bridprice = P.filter((ab, i) => {
-            let r = ab.CE.bidprice
-            // console.log("Bridprice", r);
-            return r;
-        })
+                // console.log('buy.length', buy.length);
+                while (buyyyyyyy.length === 0 && a === 0) {
 
-        var Bridpriceprofit = P.filter((ab, i) => {
-            let q = ab.CE.bidprice * 10 / 100
-            // console.log("Bridprice", q);
-            return q;
-        })
+                    // console.log(ab);
+                    buys.push(ab)
+                    setBuy_price([...buyyyyyyy, ab])
 
-        
 
-        switch (P) {
-            case Bridprice + Bridpriceprofit:
+                    a = 1;
+                }
 
-                break;
 
-            default:
-                break;
+            }
+        }
+        return ab;
+    })
+
+    // console.log("buy>>>>>>>>>>>>>>>>>>>>>>", buys);
+
+    const Brid_price = []
+    // console.log(buys);
+    buys.map((ab) => {
+        let r = ab.CE.bidprice
+        let a = ab.strikePrice
+        // console.log("bidprice", r);
+        // console.log("strikePrice", a);
+        setBid_price(r)
+        setStrike_price(a)
+        Brid_price.push(ab.CE.bidprice)
+
+
+    })
+
+
+
+
+    const Brid_price_profit = []
+    Brid_price.map((ab, i) => {
+        let q = ab * 10 / 100 + ab
+        let r = q.toFixed(1)
+        console.log("TRUE AND FALSE",r <= livebridprice);
+        if (254 <= livebridprice) {
+            let c = ab
+
+            setP_data(c)
         }
 
+        // console.log("Brid_price",r);
+        Brid_price_profit.push(r)
 
-        // if (LIVEPRICE === 41686.7) {
+    })
 
-        //     console.log(profit)
+    // let pp = []
+    // if (252 <= livebridprice) {
+    //     let r = "ab"
+    //     console.log("++++++++++++++++++++++++++++", r);
 
-        // }
-
-
-
-
-
-
-
-        return (
-
-            <div>
-                <NavbarMenu />
-
-                <>
-
-
-                    <div class="container">
+    //     pp.push(r)
+    //     return r;
+    // }
 
 
 
-                        {
-                            data4.map((data) => {
-                                // console.log(data)
-                                return (
-                                    <div class="container">
-                                        <div class="col-md-7 mb-1 d-inline p-2 bg-success text-white float-left  ">
-                                            Underlying Index: <span id="equity_underlyingVal" class="bold "><b>BANKNIFTY {data.index.last} </b></span>
-                                            <span id="equity_timeStamp" class="asondate"> As on {data.timestamp}  IST </span>
-
-                                        </div>
-
-                                        {/* <Form>
-                                            <Form.Group class="row d_flex">
-                                                <Form.Text><b>BANKNIFTY :  <b >   {data.index.last} <b>({data.index.percentChange}%)</b></b></b></Form.Text>
-                                            </Form.Group>
-                                        </Form> */}
-                                    </div>
-
-                                )
-                            })
-                        }
 
 
-                        {
-                            data3.map((data) => {
-                                // console.log(data)
-                                return (
-                                    <div>
-                                        {/* <div class="d-inline-flex p-2">PCR = {data.toFixed(2)}</div> */}
-                                        {/* <div class="d-flex flex-row-reverse">
-                                            <div class="p-2">PCR = {data.toFixed(2)}</div>
-                                            
-                                           
-                                        </div> */}
-                                        <div class="d-inline p-2 bg-success text-white float-right">PCR = {data.toFixed(2)}</div>
-                                        {/* <Form>
-                                            <Form.Group class="row d_flex">
-                                                <Form.Text><b>PCR : <b >{data.toFixed(2)}</b></b></Form.Text>
-                                            </Form.Group>
-                                        </Form> */}
-                                    </div>
 
-                                )
-                            })
-                        }
+    // })
+
+
+    return (
+        <>
+
+
+            <div className="container">
+
+                <div className="container">
+                    <div className="col-md-7 mb-1 d-inline p-2 bg-success text-white float-left  ">
+                        Underlying Index: <span id="equity_underlyingVal" className="bold "><b>BANKNIFTY {liveprices} </b></span>
+                        <span id="equity_timeStamp" className="asondate"> As on {getdata}  IST </span>
+
                     </div>
+                </div>
+                <div>
+                    {/* toFixed(2) */}
+                    <div className="d-inline p-2 bg-success text-white float-right">PCR = {Number(pcr).toFixed(2)}</div>
 
-                    <div id="chartContainer">
-                        <Table className="mt-3" class="tableFixHead" id="chartContainer">
-                            <thead>
+                </div>
 
-
-
-                                <tr style={{
-                                    backgroundColor: '	#ffbf00'
-                                }}>
-                                    <th width="30%" title="Open Interest in contracts">PE</th>
-
-                                    <th width="40%" title="Strike Price">Strike Price</th>
-
-                                    <th width="40%" title="Open Interest in contracts">CE</th>
-                                </tr>
-                            </thead>
-
-
-                            <tbody>
-
-                                {data2.map((data, i) => {
-                                    // let price = console.log(PP);
-                                    if (i > 55) {
-
-                                        return (
-
-                                            <tr >
-                                                <td style={{
-                                                    backgroundColor: PP[0] === data ? '#33F9FF' : null
-
-                                                }}>{data.PE.changeinOpenInterest + data.PE.openInterest}</td>
-
-                                                <td style={{
-                                                    backgroundColor: '#66CDAA'
-
-                                                }}  ><b>{data.strikePrice}</b></td>
-
-
-                                                <td style={{
-                                                    backgroundColor: '#CCEEFF'
-
-                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
-                                                <td >{ }</td>
-                                            </tr>
-
-                                        )
-
-                                    }
-
-                                })
-                                }
-                                {data1.map((data, i) => {
-                                    // console.log(i);
-                                    if (i < 11) {
-                                        return (
-                                            <tr >
-
-                                                <td style={{
-                                                    backgroundColor: '#CCEEFF'
-
-                                                }}>{data.PE.openInterest + data.PE.changeinOpenInterest}</td>
-                                                <td style={{
-                                                    backgroundColor: '#66CDAA'
-
-                                                }}  ><b>{data.strikePrice}</b></td>
-
-
-
-                                                <td style={{
-                                                    backgroundColor: CC[0] === data ? '#33F9FF' : null
-
-                                                }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
-                                            </tr>
-                                        )
-                                    }
-                                })
-                                }
-
-
-                            </tbody>
-                        </Table>
-                    </div>
-                </>
 
             </div>
-        )
-    }
+            <div id="chartContainer">
+                <Table className="mt-3" id="chartContainer">
+                    <thead>
+                        <tr style={{
+                            backgroundColor: '	#ffbf00'
+                        }}>
+                            <th width="30%" title="Open Interest in contracts">PE</th>
+
+                            <th width="40%" title="Strike Price">Strike Price</th>
+
+                            <th width="40%" title="Open Interest in contracts">CE</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+
+                        {/* <<<<<<<<<<<<<<<<<<< down price  >>>>>>>>>>>>>>>>>>>> */}
+                        {
+
+                            livelessthan.slice(-10).map((data, i) => {
+                                return (
+                                    <tr >
+
+                                        <td style={{
+                                            backgroundColor: pemax[0] === data ? '#ff1000' : null
+
+                                        }}>{data.PE.openInterest + data.PE.changeinOpenInterest}</td>
+                                        <td style={{
+                                            backgroundColor: '#66CDAA'
+
+                                        }}  ><b>{data.strikePrice}</b></td>
+
+                                        <td style={{
+                                            backgroundColor: '#33F9FF'
+
+                                        }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
+                                    </tr>
+                                )
+
+                            })
+                        }
+                        {/* <<<<<<<<<<<<<<<<<<< up price  >>>>>>>>>>>>>>>>>>>> */}
+                        {
+
+                            livegreterthan.slice(0, 10).map((data, i) => {
+                                return (
+
+                                    <tr >
+                                        <td style={{
+                                            backgroundColor: '#33F9FF'
+
+                                        }}>{data.PE.changeinOpenInterest + data.PE.openInterest}</td>
+
+                                        <td style={{
+                                            backgroundColor: '#66CDAA'
+
+                                        }}  ><b>{data.strikePrice}</b></td>
+
+
+                                        <td style={{
+                                            backgroundColor: cemax[0] === data ? '#ff1000' : null
+
+                                        }}>{data.CE.openInterest + data.CE.changeinOpenInterest}</td>
+
+                                    </tr>
+
+                                );
+
+                            })
+                        }
+                    </tbody>
+                </Table>
+            </div>
+
+
+        </>
+
+    )
+
 }
+export default Nse;
+

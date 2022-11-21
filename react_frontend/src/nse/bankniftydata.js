@@ -1,14 +1,15 @@
 // import React, { useEffect, useState } from "react";
 // // import { FormControl } from "react-bootstrap";
 
+// import NavbarMenu from '../components/Navbar'
 
 // import Table from 'react-bootstrap/Table';
-
+// import Switch from "react-bootstrap/esm/Switch";
 // const axios = require('axios').default;
 
-// function Nse() {
-
-
+// function Banknifty() {
+//     const [data, setData] = useState([]);
+//     const [isloading, setLoading] = useState(true);
 //     const [getdata, setGetdata] = useState([]);
 //     const [livegreterthan, setLivegreterthan] = useState([]);
 //     const [livelessthan, setLiveLessthan] = useState([]);
@@ -16,18 +17,18 @@
 //     const [cemax, setCemax] = useState([]);
 //     const [liveprices, setLiveprice] = useState([]);
 //     const [pcr, setPcr] = useState([]);
-
+//     const [pcr_value, setPcrvaule] = useState([]);
 
 //     const [diffrent, setDiffrent] = useState([]);
 
 //     const [buyyyyyyy, setBuy_price] = useState([])
+  
 
-
-//     // const [pe, setPE] = useState([])
-//     // const [ce, setCe] = useState([])    
+//     const [pe, setPE] = useState([])
+//     const [ce, setCe] = useState([])    
 //     const [bid_price, setBid_price] = useState([]);
 //     const [strike_price, setStrike_price] = useState([]);
-
+    
 
 //     const [livebridprice, setLivebdp] = useState([])
 
@@ -37,10 +38,10 @@
 //     // console.log('buy>>>>>>>>>>',buy);
 //     useEffect(() => {
 
-//         fetchData();
+//         fetchData()
 //         const interval = setInterval(() => {
 //             console.log('This will run every second!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-//             fetchData();
+//             fetchData()
 //         }, 10000);
 //         return () => clearInterval(interval);
 
@@ -48,8 +49,8 @@
 
 //     useEffect(() => {
 
-//         nsedata();
-
+//       nsedata()
+        
 //     }, [bid_price]);
 
 
@@ -80,7 +81,7 @@
 //                 // console.log("buy>>>>>.",buy.lenth);
 //                 // console.log('json', json.data)
 
-//                 // setData(json.data.records.index)
+//                 setData(json.data.records.index)
 //                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< All DATA SAVE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //                 let raa = json.data.records.timestamp
 
@@ -150,9 +151,9 @@
 //                 const PE_present_price = []
 //                 const PE_present_price2 = []
 
-//                 // setPE(PE_present_price2)
+//                 setPE(PE_present_price2)
 //                 // console.log(PE_present_price2) 
-//                 down_price.filter((ab) => {
+//                 let PE_present_price1 = down_price.filter((ab) => {
 //                     let r = ab.PE.changeinOpenInterest + ab.PE.openInterest
 
 //                     if (r === num[0]) {
@@ -162,7 +163,7 @@
 //                         // console.log("d>>>>>>>>>>>>",ab);
 //                     }
 
-//                     return ab;
+
 //                 })
 //                 // console.log("PE_pregent_price",PE_present_price);
 //                 setPemax(PE_present_price)
@@ -172,9 +173,9 @@
 //                 const CE_present_price = []
 //                 const CE_present_price2 = []
 
-//                 // setCe(CE_present_price2)
+//                 setCe(CE_present_price2)
 
-//                 up_price.map((ab) => {
+//                 let CE_present_price1 = up_price.map((ab) => {
 //                     let r = ab.CE.changeinOpenInterest + ab.CE.openInterest
 //                     if (r === num1[0]) {
 //                         // console.log(ab.strikePrice);
@@ -184,7 +185,6 @@
 
 
 //                     }
-//                     return ab;
 //                 })
 //                 // console.log("CE_pregent_price", CE_present_price);
 //                 setCemax(CE_present_price)
@@ -197,7 +197,7 @@
 //                     let r = ab.CE.bidprice
 //                     setLivebdp(r)
 //                     console.log(r);
-//                     return ab;
+
 //                 })
 
 
@@ -212,177 +212,174 @@
 //                 setPcr(PCR)
 //                 // <<<<<<<<<<<<<<<<<<<<<<< PE CE DIFFRINET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //                 const CE_PE_Diffrent = []
-//                 PE_present_price.map((ab) => {
+//                 let CE_PE_Diffrent1 = PE_present_price.map((ab) => {
 //                     let a = (ab.PE.openInterest + ab.PE.changeinOpenInterest) - (ab.CE.openInterest + ab.CE.changeinOpenInterest)
 //                     CE_PE_Diffrent.push(a)
-//                     return ab;
 //                 })
 //                 setDiffrent(CE_PE_Diffrent)
 
 //                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BUYING PRICE FIND >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-//                 // const BUY_PRICE = []
+//                 const BUY_PRICE = []
 //                 // console.log();
 
+//                 const xyz = []
+//                 let BUY_PRICE1 = PE_present_price.map((ab) => {
 
-//                 // PE_present_price.map((ab) => {
+//                     if (PE_present_price !== CE_present_price) {
+//                         let r = ab.strikePrice + 90
+//                         // console.log(r)
+//                         if (44000 >= liveprice) {
+//                             // console.log(buy.length === 0);
+//                             // let a = 0;
+//                             // while (
+//                             //     BUY_PRICE.length === 0 && a ===0) {
+//                             //     console.log("hello");
 
-//                 //     if (PE_present_price !== CE_present_price) {
+//                             //     a = 1;
+//                             //     // BUY_PRICE.push(ab)
+//                             //     // nsedata()
+
+//                             // }
+//                             // setLoading(false)    
+//                             // console.log(r >= liveprice);
+//                         }
+
+//                     }
+//                 })
+//                 // setBuy_price(BUY_PRICE)
+//                 // console.log('qqqqqqqqqqqq', BUY_PRICE);
+
+//                 var BUY_PRICE5 = PE_present_price.filter((ab) => {
+//                     if (PE_present_price !== CE_present_price && CE_PE_Diffrent > 50000) {
+//                         let r = ab.strikePrice + 90
+//                         if (44000 >= liveprice) {
+//                             BUY_PRICE.push(ab)
+
+//                             // console.log("dddddddddddd",null === buy);
+//                             // if( null === buy){
+//                             // console.log("hello");
+//                             // nsedata()
+//                             // }
+
+//                         }
+//                         // return r >= liveprice;
+
+//                     }
+
+//                 })
+
+
+//                 // console.log('buyyyyyyy',pemax);
+//                 // const buyssss= [] 
+//                 // console.log("buyssss",buyssss);
+//                 // let BUY_PRICE7 = pemax.map((ab) => {
+//                 //     if (pemax !== cemax && diffrent >= 50000 && pcr >= 0.7) {
 //                 //         let r = ab.strikePrice + 90
-//                 //         // console.log(r)
-//                 //         if (44000 >= liveprice) {
-//                 //             // console.log(buy.length === 0);
-//                 //             // let a = 0;
-//                 //             // while (
-//                 //             //     BUY_PRICE.length === 0 && a ===0) {
-//                 //             //     console.log("hello");
-
-//                 //             //     a = 1;
-//                 //             //     // BUY_PRICE.push(ab)
-//                 //             //     // nsedata()
-
-//                 //             // }
-//                 //             // setLoading(false)    
-//                 //             // console.log(r >= liveprice);
-//                 //             return ab;
+//                 //         // console.log(r);
+//                 //         if (44000 >= liveprices) {
+//                 //             let a = 0;
+            
+//                 //             // console.log('buy.length', buy.length);
+//                 //             while (buyyyyyyy.length === 0 && a === 0) {
+                                
+//                 //                 console.log(ab);
+//                 //                 console.log("helloooooo");
+//                 //                 buyssss.push(ab)
+//                 //                 setBuy_price([...buyyyyyyy, ab])
+                               
+            
+//                 //                 a = 1;
+//                 //             }
+                           
+                   
 //                 //         }
-//                 //         return ab;
 //                 //     }
-//                 //     return ab;
+//                 // })
+//                 // PE_present_price.filter((ab) => {
+//                 //             let r = ab.strikePrice + 90
+//                 //             switch(ab){
+//                 //                 case():
+
+
+//                 //             }
+//                 // })
+
+
+//                 // if (PE_present_price2 !== CE_present_price2) {
+//                 //     PE_present_price.filter((ab) => {
+//                 //         let r = ab.strikePrice + 90
+//                 //         if (r >= liveprice) {
+//                 //         console.log('rrrrrrrrrrrr',r);
+//                 //         BUY_PRICE.push(ab)
+
+//                 //     }
+//                 // })
+//                 // nsedata()
+//                 // }
+
+
+
+//                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PROFIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+//                 let Bridprice1 = BUY_PRICE.map((ab) => {
+//                     let r = ab.CE.bidprice
+//                     console.log("rrrrrrrrrrrrrrrrrrrrrrrr",r);
+//                     return r;
+//                 })
+//                 // setBid_price(Bridprice1)
+
+
+//                 let strike_price = BUY_PRICE.map((ab) => {
+//                     let r = ab.CE.strikePrice
+//                     return r;
+
+//                 })
+
+//                 // console.log("Bridprice1", strike_price);
+
+//                 let Bridprice = PE_present_price.map((ab) => {
+//                     let r = ab.CE.bidprice
+//                     return r;
+//                 })
+//                 // console.log("Bridprice", Bridprice);
+
+//                 let Bridpriceprofit = BUY_PRICE.map((ab, i) => {
+//                     let q = ab.CE.bidprice * 10 / 100
+//                     return q;
+//                 })
+
+//                 // console.log("Bridpriceproficte", Bridpriceprofit);
+
+//                 let totalsum = Bridprice1[0] + Bridpriceprofit[0];
+//                 // console.log("totalsum>>>>>>>>>>>>>>>", totalsum);
+
+//                 if (totalsum === Bridprice) {
+//                     let x = BUY_PRICE.pop()
+//                     return x;
+//                 }
+
+//                 // console.log("POP", BUY_PRICE);
+
+//                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< STOP LOSS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+//                 // let STOP_LOSS = PE_pregent_price.filter((ab) => {
+//                 //     if (PE_pregent_price !== CE_pregent_price && CE_PE_Diffrent >= 50000 && PCR >= 1) {
+//                 //         let r = ab.strikePrice + 10
+//                 //         // console.log(r);
+//                 //    
+//                 //         return r;
+//                 //     }
+
+//                 //     if (STOP_LOSS = liveprice) {
+//                 //         let x = BUY_PRICE.pop()
+//                 //         return x;
+//                 //     }
+//                 // })
+//                 // console.log("a>>>>>>>>>>>>>>>>>>>", BUY_PRICE);
+
+
 //             })
-//             // setBuy_price(BUY_PRICE)
-//             // console.log('qqqqqqqqqqqq', BUY_PRICE);
-
-//             // var BUY_PRICE5 = PE_present_price.filter((ab) => {
-//             //     if (PE_present_price !== CE_present_price && CE_PE_Diffrent > 50000) {
-//             //         let r = ab.strikePrice + 90
-//             //         if (44000 >= liveprice) {
-//             //             BUY_PRICE.push(ab)
-
-//             //             // console.log("dddddddddddd",null === buy);
-//             //             // if( null === buy){
-//             //             // console.log("hello");
-//             //             // nsedata()
-//             //             // }
-
-//             //         }
-//             //         // return r >= liveprice;
-
-//             //     }
-
-//             // })
-
-
-//             // console.log('buyyyyyyy',pemax);
-//             // const buyssss= [] 
-//             // console.log("buyssss",buyssss);
-//             // let BUY_PRICE7 = pemax.map((ab) => {
-//             //     if (pemax !== cemax && diffrent >= 50000 && pcr >= 0.7) {
-//             //         let r = ab.strikePrice + 90
-//             //         // console.log(r);
-//             //         if (44000 >= liveprices) {
-//             //             let a = 0;
-
-//             //             // console.log('buy.length', buy.length);
-//             //             while (buyyyyyyy.length === 0 && a === 0) {
-
-//             //                 console.log(ab);
-//             //                 console.log("helloooooo");
-//             //                 buyssss.push(ab)
-//             //                 setBuy_price([...buyyyyyyy, ab])
-
-
-//             //                 a = 1;
-//             //             }
-
-
-//             //         }
-//             //     }
-//             // })
-//             // PE_present_price.filter((ab) => {
-//             //             let r = ab.strikePrice + 90
-//             //             switch(ab){
-//             //                 case():
-
-
-//             //             }
-//             // })
-
-
-//             // if (PE_present_price2 !== CE_present_price2) {
-//             //     PE_present_price.filter((ab) => {
-//             //         let r = ab.strikePrice + 90
-//             //         if (r >= liveprice) {
-//             //         console.log('rrrrrrrrrrrr',r);
-//             //         BUY_PRICE.push(ab)
-
-//             //     }
-//             // })
-//             // nsedata()
-//             // }
-
-
-
-//             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PROFIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-//             // let Bridprice1 = BUY_PRICE.map((ab) => {
-//             //     let r = ab.CE.bidprice
-//             //     console.log("rrrrrrrrrrrrrrrrrrrrrrrr", r);
-//             //     return r;
-//             // })
-//             // // setBid_price(Bridprice1)
-
-
-//             // let strike_price = BUY_PRICE.map((ab) => {
-//             //     let r = ab.CE.strikePrice
-//             //     return r;
-
-//             // })
-
-//             // // console.log("Bridprice1", strike_price);
-
-//             // let Bridprice = PE_present_price.map((ab) => {
-//             //     let r = ab.CE.bidprice
-//             //     return r;
-//             // })
-//             // // console.log("Bridprice", Bridprice);
-
-//             // let Bridpriceprofit = BUY_PRICE.map((ab, i) => {
-//             //     let q = ab.CE.bidprice * 10 / 100
-//             //     return q;
-//             // })
-
-//             // // console.log("Bridpriceproficte", Bridpriceprofit);
-
-//             // let totalsum = Bridprice1[0] + Bridpriceprofit[0];
-//             // // console.log("totalsum>>>>>>>>>>>>>>>", totalsum);
-
-//             // if (totalsum === Bridprice) {
-//             //     let x = BUY_PRICE.pop()
-//             //     return x;
-//             // }
-
-//             // console.log("POP", BUY_PRICE);
-
-//             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< STOP LOSS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-//             // let STOP_LOSS = PE_pregent_price.filter((ab) => {
-//             //     if (PE_pregent_price !== CE_pregent_price && CE_PE_Diffrent >= 50000 && PCR >= 1) {
-//             //         let r = ab.strikePrice + 10
-//             //         // console.log(r);
-//             //    
-//             //         return r;
-//             //     }
-
-//             //     if (STOP_LOSS = liveprice) {
-//             //         let x = BUY_PRICE.pop()
-//             //         return x;
-//             //     }
-//             // })
-//             // console.log("a>>>>>>>>>>>>>>>>>>>", BUY_PRICE);
-
-
-//             // })
 //             .catch(err => {
 //                 console.log(err)
 //             })
@@ -403,14 +400,11 @@
 
 //     const nsedata = async () => {
 //         try {
-
-//             console.log("bid_price", bid_price);
-//             console.log("strike_price", strike_price);
-            
-//             const article = {
-//                 'bid_price': bid_price, 'strike_price': strike_price, 'live_price': liveprices, 'pcr_value': pcr
-//             };
-//             //  console.log("article",article);
+//             console.log("bid_price",bid_price);
+//             console.log("strike_price",strike_price);
+//             const article = { 'bid_price': bid_price ,'strike_price': strike_price,'live_price': liveprices,'pcr_value': pcr
+//          };
+//         //  console.log("article",article);
 //             let formField = new FormData()
 //             formField.append('bid_price', bid_price)
 //             formField.append('strike_price', strike_price)
@@ -424,7 +418,6 @@
 //             await axios({
 //                 method: 'post',
 //                 url: 'http://127.0.0.1:8000/nse/',
-//                 mode:'cors',
 //                 data: article,
 
 
@@ -439,37 +432,13 @@
 //         }
 //     }
 
-
-
-//     const shelldata = async () => {
-//         try {
-//             {
-                
-           
-//            await axios({
-//                 method: 'post',
-//                 url: 'http://127.0.0.1:8000/nse/'
-              
-
-
-//             }).then(response => {
-//                 console.log(response.data);
-
-//             }) }
-//         } catch (err) {
-//             // here we are receiving validation errors
-//             console.log("Err == ", err.response);
-//             // console.log(err.response.data.errors);
-//         }
-//     }
-
 //     const buys = []
-//     console.log(diffrent >= 50000);
-//     pemax.map((ab) => {
+  
+//     let BUY_PRICE = pemax.map((ab) => {
 //         if (pemax !== cemax && diffrent >= 50000 && pcr >= 0.7) {
 //             let r = ab.strikePrice + 90
 //             // console.log(r);
-//             if (r >= liveprices) {
+//             if (44000 >= liveprices) {
 //                 let a = 0;
 
 //                 // console.log('buy.length', buy.length);
@@ -478,57 +447,54 @@
 //                     console.log(ab);
 //                     buys.push(ab)
 //                     setBuy_price([...buyyyyyyy, ab])
-
+                   
 
 //                     a = 1;
 //                 }
-
-
+               
+       
 //             }
 //         }
-//         return ab;
 //     })
 
-//     console.log("buy>>>>>>>>>>>>>>>>>>>>>>",buys);
+//     // console.log("buy",buys);
 
 //     const Brid_price = []
 //     // console.log(buys);
-//     buys.map((ab) => {
+//     let Bridprice1 = buys.map((ab) => {
 //         let r = ab.CE.bidprice
+
 //         let a = ab.strikePrice
-//         console.log("bidprice",r);
-//         console.log("strikePrice",a);
 //         setBid_price(r)
 //         setStrike_price(a)
-//         Brid_price.push(ab.CE.bidprice)
-        
+//         Brid_price.push(r)
 
+  
 //     })
 
-// console.log("Brid_price",Brid_price);
+
 
 
 //     // console.log("bid_price",bid_price);
 //     const Brid_price_profit = []
-//     Brid_price.map((ab, i) => {
+//     let Bridpriceprofit = Brid_price.map((ab, i) => {
 //         let q = ab * 10 / 100 + ab
 //         let r = q.toFixed(1)
-//         // console.log("Brid_price",r);
+//         console.log(r);
 //         Brid_price_profit.push(r)
-  
 //     })
 
 //     // buys.map((ab,i)=>{
-// // console.log("livebridprice",Brid_price_profit);
+
 //     if (Brid_price_profit >= livebridprice) {
-        
+//         buys.pop()
 //     }
 //     // })
 
 
 //     return (
 //         <>
-          
+//             <NavbarMenu />
 
 //             <div className="container">
 
@@ -629,5 +595,5 @@
 //     )
 
 // }
-// export default Nse;
+// export default Banknifty;
 
